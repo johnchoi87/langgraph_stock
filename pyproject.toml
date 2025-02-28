@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "langgraph-stock"
+name = "langgraph_stock"
 version = "0.1.0"
 description = ""
 authors = ["최준우 <emotree@wavve.com>"]
