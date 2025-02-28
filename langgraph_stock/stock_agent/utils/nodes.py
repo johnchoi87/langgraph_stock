@@ -1,13 +1,11 @@
 from langchain_community.tools import TavilySearchResults
-from langchain_core.output_parsers import PydanticOutputParser, StrOutputParser
+from langchain_core.output_parsers import PydanticOutputParser
 from langchain_teddynote.tools import GoogleNews
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from stock_agent.utils.state import ServiceState, StockRecommendation, StockRecommendations
+from langgraph_stock.stock_agent.utils.state import ServiceState, StockRecommendations
 from datetime import datetime, timedelta
 import yfinance as yf
-import matplotlib
-import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,9 +23,9 @@ tavily_search = TavilySearchResults(
     # exclude_domains = []
 )
 
+
 # 이슈에 대한 검색 키워드 생성 함수 정의
 def generate_keyword_query(state: ServiceState):
-
     if messages := state.get("messages", []):
         # 최근 메시지
         ai_message = messages[-1]
@@ -72,7 +70,7 @@ def search_news(state: ServiceState):
     else:
         #
         raise ValueError("No messages found in the state.")
-    #print(f'Called search_news {ai_message}')
+    # print(f'Called search_news {ai_message}')
     return {"news_articles": [tavily_search.invoke(f"{ai_message} stock news")]}
 
 
@@ -94,9 +92,9 @@ def recommend_stocks(state: ServiceState):
     )
     chain = prompt | llm | parser
     # return parser.parse(result)
-    #print(parser.get_format_instructions())
+    # print(parser.get_format_instructions())
     result = chain.invoke(related_articles)
-    #print(result)
+    # print(result)
     return {"related_stocks": result.recommendations}
 
 
@@ -110,7 +108,7 @@ def download_stock_prices(state: ServiceState):
         raise ValueError("No messages found in the state.")
     # 1. 티커 리스트 정의
     # tickers = ["AAPL", "MSFT", "GOOG"]  # 가져올 티커 리스트
-    #print(stocks)
+    # print(stocks)
     tickers = [stock.ticker for stock in stocks]
     # 2. 날짜 범위 설정 (최근 1년)
     end_date = datetime.now()
@@ -122,7 +120,7 @@ def download_stock_prices(state: ServiceState):
     # 4. 종가(Close) 데이터만 추출
     close_prices = data['Close']
     # 5. 데이터프레임 확인
-    #print(close_prices.head())  # 상위 5개 행 출력
+    # print(close_prices.head())  # 상위 5개 행 출력
     return {"stock_data": data}
 
 
