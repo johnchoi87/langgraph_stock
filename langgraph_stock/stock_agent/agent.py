@@ -1,6 +1,6 @@
 # 그래프 생성
 from langgraph.graph import StateGraph, START, END
-from utils.nodes import search_news, recommend_stocks, download_stock_prices, \
+from langgraph_stock.stock_agent.utils.nodes import search_news, recommend_stocks, download_stock_prices, \
     summarize_related_stocks, \
     generate_keyword_query
 from langgraph_stock.stock_agent.utils.state import ServiceState
